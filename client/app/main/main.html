@@ -1,0 +1,26 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Buy here</h1>
+    <p class="lead">Realtime web application for buying </p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Orders:</h1>
+
+      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="order in $ctrl.orders">
+        <li ng-show="order.active">
+          <a href="#" uib-tooltip="{{order}}">
+            {{order.price | currency}}
+            <span ng-switch="order.sold">
+              <span ng-switch-when="false" class="fa fa-money" ng-click="$ctrl.buy(order)"></span>
+              <span ng-switch-default style="color:red; text-transform: uppercase;">sold</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
