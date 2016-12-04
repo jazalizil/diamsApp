@@ -9,6 +9,8 @@ var controller = require('./auth.controller');
 
 var router = express.Router();
 
-router.post('/login', controller.auth);
+router.get('/login', controller.login);
 
-module.exports = router;
+router.get('/logout', controller.logout);
+
+export default router;

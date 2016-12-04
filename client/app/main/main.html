@@ -7,20 +7,27 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Orders:</h1>
 
+    <div class="col-lg-12" ng-show="isLogged">
+      <h1 class="page-header">Orders:</h1>
       <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="order in $ctrl.orders">
         <li ng-show="order.active">
           <a href="#" uib-tooltip="{{order}}">
             {{order.price | currency}}
             <span ng-switch="order.sold">
-              <span ng-switch-when="false" class="fa fa-money" ng-click="$ctrl.buy(order)"></span>
-              <span ng-switch-default style="color:red; text-transform: uppercase;">sold</span>
-            </span>
+            <span ng-switch-when="false" class="fa fa-money" ng-click="$ctrl.buy(order)"></span>
+            <span ng-switch-default style="color:red; text-transform: uppercase;">sold</span>
+          </span>
           </a>
         </li>
       </ul>
     </div>
+
+    <div class="col-lg-12" ng-hide="isLogged">
+      <div class="center-text">
+        Please Log in to show the orders.
+      </div>
+    </div>
+
   </div>
 </div>

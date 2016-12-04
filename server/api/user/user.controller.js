@@ -23,6 +23,10 @@ export function index(req, res) {
     .catch(Utils.handleError(res));
 }
 
+export function me(req, res) {
+  res.json(req.user);
+}
+
 // Gets a single User from the DB
 export function show(req, res) {
   return User.findById(req.params.id).exec()
@@ -43,6 +47,9 @@ export function upsert(req, res) {
   if(req.body._id) {
     Reflect.deleteProperty(req.body, '_id');
   }
+  if(req.user.id != req.params.id) {
+    return res.status(401).end();
+  }
   return User.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
 
     .then(Utils.respondWithResult(res))
@@ -53,6 +60,9 @@ export function upsert(req, res) {
 export function patch(req, res) {
   if(req.body._id) {
     Reflect.deleteProperty(req.body, '_id');
+  }
+  if(req.user.id != req.params.id) {
+    return res.status(401).end();
   }
   return User.findById(req.params.id).exec()
     .then(Utils.handleEntityNotFound(res))

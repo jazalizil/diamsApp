@@ -4,24 +4,31 @@
 import angular from 'angular';
 
 export class NavbarComponent {
-  /*@ngInject*/
-  constructor(Auth, $state) {
-    this.menu = [{
-      title: 'Home',
-      click: this.main
-    }, {
-      title: 'Signin',
-      click: this.login
-    }];
-    this.isCollapsed = true;
-    this.Auth = Auth;
-    this.$state = $state;
+  menu = [{
+    title: 'Home',
+    state: 'main'
+  }];
+  isCollapsed = true;
+
+  constructor($rootScope, Auth) {
+    'ngInject';
+    this.isLoggedIn = Auth.isLoggedInSync;
+    this.getCurrentUser = Auth.getCurrentUserSync;
+    this.loginPromise = Auth.login;
+    this.logoutPromise = Auth.logout;
+    this.$rootScope = $rootScope;
   }
+
   login() {
-    this.Auth.login();
+    this.loginPromise(() => {
+      this.$rootScope.$emit('login');
+    });
   }
-  main() {
-    this.$state.go('main');
+
+  logout() {
+    this.logoutPromise(() => {
+      this.$rootScope.$emit('logout');
+    });
   }
 }
 

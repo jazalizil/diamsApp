@@ -12,7 +12,20 @@
     <div uib-collapse="$ctrl.isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in $ctrl.menu">
-            <a href="#" ng-click="item.click">{{item.title}}</a>
+            <a ui-sref="{{item.state}}">{{item.title}}</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-hide="$ctrl.isLoggedIn()">
+          <a class="pointer" ng-click="$ctrl.login()">
+            Login
+          </a>
+        </li>
+        <li ng-show="$ctrl.isLoggedIn()"><p class="navbar-text">Hello {{ $ctrl.getCurrentUser().ip }}</p></li>
+        <li ng-show="$ctrl.isLoggedIn()">
+          <a class="pointer" ng-click="$ctrl.logout()">
+            Logout
+          </a>
         </li>
       </ul>
     </div>

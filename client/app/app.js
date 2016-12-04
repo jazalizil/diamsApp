@@ -5,6 +5,7 @@ import angular from 'angular';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
 import ngSanitize from 'angular-sanitize';
+import 'angular-local-storage';
 import 'angular-socket-io';
 import 'angular-toastr';
 
@@ -25,10 +26,11 @@ import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 import authorization from '../components/auth/auth.module';
 
+
 import './app.less';
 
 angular.module('diamsApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter, navbar,
-  footer, main, constants, socket, util, authorization, 'toastr'
+  footer, main, constants, socket, util, authorization, 'toastr', 'LocalStorageModule'
 ])
   .config(routeConfig);
 

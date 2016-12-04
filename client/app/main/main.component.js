@@ -4,35 +4,42 @@ import routing from './main.routes';
 
 export class MainController {
   /*@ngInject*/
-  constructor($http, $scope, socket, $log) {
+  constructor($http, $scope, socket, $log, Auth, toastr) {
     this.$http = $http;
     this.socket = socket;
     this.$log = $log;
     this.orders = [];
+    this.isLogged = Auth.isLoggedInSync();
 
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('order');
+    $scope.$on('$destroy', () => {
+      this.socket.unsyncUpdates('order');
     });
 
-    // $scope.$watchCollection(() => {
-    //   return this.orders;
-    // }, newVal => {
-    //   this.$log.debug(`new orders::${newVal}`);
-    // });
+    $scope.$on('login', () => {
+      this.isLogged = true;
+      toastr.success('Welcome !');
+      this.socket.syncUpdates('order', this.orders,
+        (ev, order) => {
+          if(ev === 'updated') {
+            this.$log.debug('order', order, 'updated');
+          }
+        });
+    });
 
+    $scope.$on('logout', () => {
+      toastr.error('Good bye !');
+      this.isLogged = false;
+      this.socket.unsyncUpdates('order');
+    });
   }
 
   $onInit() {
-    this.$http.get('/api/orders')
-      .then(response => {
-        this.orders = response.data;
-        this.socket.syncUpdates('order', this.orders,
-          (ev, order) => {
-            if(ev === 'updated') {
-              this.$log.debug('order', order, 'updated');
-            }
+    if(this.isLogged) {
+      this.$http.get('/api/orders')
+        .then(response => {
+          this.orders = response.data;
         });
-      });
+    }
   }
 
   buy(order) {
